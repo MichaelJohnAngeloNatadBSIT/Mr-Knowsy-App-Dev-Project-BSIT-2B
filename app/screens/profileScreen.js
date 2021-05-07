@@ -4,12 +4,14 @@ import {
   Text,
   View,
   Image,
+  ScrollView,
 } from 'react-native';
 
 export default class ProfileIconsView extends Component {
 
   render() {
     return (
+      <ScrollView>
       <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.headerContent}>
@@ -21,7 +23,7 @@ export default class ProfileIconsView extends Component {
                 </Text>
             </View>
           </View>
-
+        
           <View style={styles.body}>
             <View style={styles.bodyContent}>
 
@@ -55,26 +57,10 @@ export default class ProfileIconsView extends Component {
                 <Text style={styles.info}>Icon</Text>
               </View>
 
-              <View style={styles.menuBox}>
-                <Image style={styles.icon} source={{uri: 'https://img.icons8.com/dusk/70/000000/visual-game-boy.png'}}/>
-                <Text style={styles.info}>Icon</Text>
-              </View>
-
-              <View style={styles.menuBox}>
-                <Image style={styles.icon} source={{uri: 'https://img.icons8.com/flat_round/70/000000/cow.png'}}/>
-                <Text style={styles.info}>Icon</Text>
-              </View>
-
-              <View style={styles.menuBox}>
-                <Image style={styles.icon} source={{uri: 'https://img.icons8.com/color/70/000000/coworking.png'}}/>
-                <Text style={styles.info}>Icon</Text>
-              </View>
-
-
-
             </View>
         </View>
       </View>
+      </ScrollView>
     );
   }
 }
