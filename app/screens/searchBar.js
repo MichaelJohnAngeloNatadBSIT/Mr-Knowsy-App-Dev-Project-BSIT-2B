@@ -63,6 +63,7 @@ const Search = () => {
 
   const ItemView = ({ item }) => {
     return (
+      <TouchableOpacity>
       <Card style={{ marginTop: 10 }}>
        <CardItem>
           <View>
@@ -73,26 +74,29 @@ const Search = () => {
             <Text
               style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}
             >
-              {item.title}
+              {item.title.toUpperCase()}
             </Text>
             <Text style={styles.itemStyle} onPress={() => getItem(item)}>
-         {item.id}
-         {'.'}
-         {item.body.toUpperCase()}
-         </Text>
+              {item.id}
+              {'.'}
+              {item.body.toUpperCase()}
+            </Text>
         </View>
         </CardItem>
         <CardItem footer bordered>
           <View style={styles.footer}>
           <Rating
+            imageSize={30}
             onFinishRating={(rating) => {
             alert('Star Rating: ' + JSON.stringify(rating));
+            
           }}
-          style={{ paddingVertical: 10 }}
+          style={styles.ratingStar}
           />
           </View>
         </CardItem>
         </Card>
+        </TouchableOpacity>
     );
   };
 
@@ -146,9 +150,15 @@ const styles = StyleSheet.create({
   itemStyle: {
     padding: 10,
   },
+  ratingStar:{
+    
+    paddingVertical: 10,
+    justifyContent: 'center',
+  },
   image:{
-    height: 50,
-    width: 50,
+    height: 400,
+    width: 300,
+    alignSelf: 'center',
   },
   searchBar:{
     backgroundColor: '#3366ff',
