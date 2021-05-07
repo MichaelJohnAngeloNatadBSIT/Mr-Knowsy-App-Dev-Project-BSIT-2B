@@ -6,29 +6,47 @@ import { Icon } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
+
 import Search from './app/screens/searchBar';
+import ProfileIconsView from './app/screens/profileScreen';
 
-//tabs functions
-function YTvideosfunc() {
+//top tabs - art books tab
+function TabA() {
   return (
-    <View style={styles.container}>
-        <View>
-          <Search />  
-        </View>
+    <View style={styles.topTabContainer}>
+      <Text style={styles.text}>Tab A</Text>
     </View>
-
   );
 }
+function TabB() {
+  return (
+    <View style={styles.topTabContainer}>
+      <Text style={styles.topTabText}>Tab B</Text>
+    </View>
+  );
+}
+
+//bottom tabs functions
+function YTvideosfunc() {
+  return (   
+    <Search />
+  );
+}
+
 function artBoofunc() {
   return (
-    <Search />
+
+      <Search />
+    
+    
   );
 }
 function acctFunc() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Account Information Tab</Text>
-    </View>
+    // <View style={styles.container}>
+    //   <Text style={styles.text}>Account Information Tab</Text>
+    // </View>
+    <ProfileIconsView/>
   );
 }
 
@@ -117,9 +135,9 @@ export default function DrawerScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
+    flex: 1,
   },
   text: {
     fontSize: 30,
@@ -135,6 +153,15 @@ const styles = StyleSheet.create({
     
   },
   text: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  topTabContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  topTabText: {
     fontSize: 30,
     fontWeight: 'bold',
   },
