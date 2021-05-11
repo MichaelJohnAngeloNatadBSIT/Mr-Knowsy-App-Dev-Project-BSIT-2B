@@ -43,9 +43,6 @@ function artBoofunc() {
 }
 function acctFunc() {
   return (
-    // <View style={styles.container}>
-    //   <Text style={styles.text}>Account Information Tab</Text>
-    // </View>
     <ProfileIconsView/>
   );
 }

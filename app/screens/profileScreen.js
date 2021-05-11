@@ -1,11 +1,18 @@
-import React, { Component } from 'react';
+//import { Icon } from 'native-base';
+import React, { Component,useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   Image,
   ScrollView,
+  FlatList,
 } from 'react-native';
+import { Icon } from 'react-native-elements';
+
+
+
+
 
 export default class ProfileIconsView extends Component {
 
@@ -23,12 +30,13 @@ export default class ProfileIconsView extends Component {
                 </Text>
             </View>
           </View>
-        
+
           <View style={styles.body}>
             <View style={styles.bodyContent}>
 
               <View style={styles.menuBox}>
-                <Image style={styles.icon} source={{uri: 'https://img.icons8.com/color/70/000000/cottage.png'}}/>
+                {/* <Image style={styles.icon} source={{uri: 'https://img.icons8.com/color/70/000000/cottage.png'}}/> */}
+                <Icon name='upload' type='font-awesome' />
                 <Text style={styles.info}>Icon</Text>
               </View>
 
@@ -37,30 +45,10 @@ export default class ProfileIconsView extends Component {
                 <Text style={styles.info}>Icon</Text>
               </View>
 
-              <View style={styles.menuBox}>
-                <Image style={styles.icon} source={{uri: 'https://img.icons8.com/color/70/000000/filled-like.png'}}/>
-                <Text style={styles.info}>Icon</Text>
-              </View>
-
-              <View style={styles.menuBox}>
-                <Image style={styles.icon} source={{uri: 'https://img.icons8.com/color/70/000000/facebook-like.png'}}/>
-                <Text style={styles.info}>Icon</Text>
-              </View>
-
-              <View style={styles.menuBox}>
-                <Image style={styles.icon} source={{uri: 'https://img.icons8.com/color/70/000000/shutdown.png'}}/>
-                <Text style={styles.info}>Icon</Text>
-              </View>
-
-              <View style={styles.menuBox}>
-                <Image style={styles.icon} source={{uri: 'https://img.icons8.com/color/70/000000/traffic-jam.png'}}/>
-                <Text style={styles.info}>Icon</Text>
-              </View>
-
             </View>
         </View>
       </View>
-      </ScrollView>
+    </ScrollView>
     );
   }
 }
