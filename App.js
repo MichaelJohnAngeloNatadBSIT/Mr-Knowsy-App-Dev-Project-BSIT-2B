@@ -6,9 +6,11 @@ import { Icon } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
+import * as firebase from 'firebase';
 
 import Search from './app/screens/searchBar';
 import ProfileIconsView from './app/screens/profileScreen';
+import apiKeys from './app/constants/apiKeys';
 
 //top tabs - art books tab
 function TabA() {
@@ -119,6 +121,21 @@ function ScreenC() {
 const Drawer = createDrawerNavigator();
 
 export default function DrawerScreen({ navigation }) {
+  
+  if(!firebase.apps.length){
+  firebase.initializeApp(apiKeys.FirebaseConfig);
+  }
+
+  firebase.database().ref('users/001').set(
+    {
+      name: 'test1',
+      age: 23
+    }
+  ).then(()=>{
+    console.log('Inserted!');
+  }).catch((error)=> {
+    console.log('error');
+  });
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName='Screen A'>

@@ -35,7 +35,6 @@ export default class ProfileIconsView extends Component {
             <View style={styles.bodyContent}>
 
               <View style={styles.menuBox}>
-                {/* <Image style={styles.icon} source={{uri: 'https://img.icons8.com/color/70/000000/cottage.png'}}/> */}
                 <Icon name='upload' type='font-awesome' />
                 <Text style={styles.info}>Icon</Text>
               </View>
