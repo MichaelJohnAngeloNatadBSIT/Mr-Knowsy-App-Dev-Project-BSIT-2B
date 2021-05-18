@@ -1,111 +1,45 @@
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Icon } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import * as firebase from 'firebase';
 
-import Search from './app/screens/searchBar';
-import ProfileIconsView from './app/screens/profileScreen';
-import apiKeys from './app/constants/apiKeys';
 
-//top tabs - art books tab
-function TabA() {
-  return (
-    <View style={styles.topTabContainer}>
-      <Text style={styles.text}>Tab A</Text>
-    </View>
-  );
-}
-function TabB() {
-  return (
-    <View style={styles.topTabContainer}>
-      <Text style={styles.topTabText}>Tab B</Text>
-    </View>
-  );
-}
+import BottomTabsNav from './app/screens/bottomTabsNav';
+import LogInScreen  from './app/screens/loginScreen';
+import Signup from './app/screens/signUpScreen';
+import Login from './app/screens/loginScreen';
+import firebase from './app/constants/fireBaseDB';
 
-//bottom tabs functions
-function YTvideosfunc() {
-  return (   
-    <Search />
-  );
-}
 
-function artBoofunc() {
-  return (
+setTimeout(()=>{
+  firebase.database().ref('users/004').set(
+    {
+      name: 'test4232442232',
+      age: 1252242424
+    }
+  ).then(()=>{
+    console.log('Inserted!');
+  }).catch((error)=> {
+    console.log('error');
+  });
+}, 5000)
 
-      <Search />
-    
-    
-  );
-}
-function acctFunc() {
-  return (
-    <ProfileIconsView/>
-  );
-}
 
-const Tab = createBottomTabNavigator();
 
 //drawer tabs for Screen A
 function ReactNavigationBottomTabs() {
-    
   return (
-    //contents of Bottom Tabs
-    <Tab.Navigator
-      tabBarOptions={
-        {
-          //for buttons
-          activeTintColor: '#80d4ff',
-          inactiveTintColor: '#004466',
-          //for background
-          activeBackgroundColor: '#006699',
-          inactiveBackgroundColor: '#0099e6',
-        }
-      }
-    >
-      <Tab.Screen
-        name='YT Videos'
-        component={YTvideosfunc}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name='sc-youtube' type='evilicon' color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name='Articles/Books'
-        component={artBoofunc}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name='book' color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name='Account'
-        component={acctFunc}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name='person' color={color} size={size} />
-          ),
-        }} 
-      />   
-    </Tab.Navigator>
-   
+    <BottomTabsNav/>
   );
 }
 
 //drawer tabs for Screen B
 function ScreenB() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Screen B</Text>
-    </View>
+    <LogInScreen />
   );
 }
 
@@ -119,29 +53,16 @@ function ScreenC() {
 }
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 export default function DrawerScreen({ navigation }) {
-  
-  if(!firebase.apps.length){
-  firebase.initializeApp(apiKeys.FirebaseConfig);
-  }
 
-  firebase.database().ref('users/001').set(
-    {
-      name: 'test1',
-      age: 23
-    }
-  ).then(()=>{
-    console.log('Inserted!');
-  }).catch((error)=> {
-    console.log('error');
-  });
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName='Screen A'>
+      <Drawer.Navigator initialRouteName='LoginScreen'>
         <Drawer.Screen name='Screen A' component={ReactNavigationBottomTabs} />
-        <Drawer.Screen name='Screen B' component={ScreenB} />
-        <Drawer.Screen name='Screen C' component={ScreenC} />
+        <Drawer.Screen name='Screen B' component={Signup} />
+        <Drawer.Screen name='Screen C' component={Login} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
