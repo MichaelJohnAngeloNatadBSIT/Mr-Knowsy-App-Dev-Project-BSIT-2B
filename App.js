@@ -12,6 +12,7 @@ import LogInScreen  from './app/screens/loginScreen';
 import Signup from './app/screens/signUpScreen';
 import Login from './app/screens/loginScreen';
 import firebase from './app/constants/fireBaseDB';
+import UploadFiles from './app/screens/uploadFiles';
 
 
 setTimeout(()=>{
@@ -62,7 +63,7 @@ export default function DrawerScreen({ navigation }) {
       <Drawer.Navigator initialRouteName='LoginScreen'>
         <Drawer.Screen name='Screen A' component={ReactNavigationBottomTabs} />
         <Drawer.Screen name='Screen B' component={Signup} />
-        <Drawer.Screen name='Screen C' component={Login} />
+        <Drawer.Screen name='Screen C' component={UploadFiles} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
