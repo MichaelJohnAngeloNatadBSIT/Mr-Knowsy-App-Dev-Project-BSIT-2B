@@ -13,7 +13,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
+
 
 import firebase from '../constants/fireBaseDB';
 
@@ -51,7 +51,7 @@ export default class Login extends React.Component{
           email: '', 
           password: ''
         })
-        this.props.navigation.navigate('Screen A')
+        this.props.navigation.navigate('Account')
       })
       .catch(error => this.setState({ errorMessage: error.message }))
     }
