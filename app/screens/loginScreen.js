@@ -18,6 +18,10 @@ import {
 import firebase from '../constants/fireBaseDB';
 
 export default class Login extends React.Component{
+  static navigationOptions =
+ {
+    title: 'Login',
+ };
   constructor() {
     super();
     this.state = { 

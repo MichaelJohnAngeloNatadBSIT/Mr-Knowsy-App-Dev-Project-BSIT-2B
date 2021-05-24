@@ -1,5 +1,10 @@
 import * as firebase from 'firebase';
 
+// import firebase from '@react-native-firebase/app';
+// import auth from '@react-native-firebase/auth';
+// import storage from '@react-native-firebase/storage';
+// import database from '@react-native-firebase/database';
+
 const firebaseConfig = {
     apiKey: "AIzaSyAWceCyECacngLCMc2afu8IC_UcigdEsGk",
     authDomain: "mr-knowsy-database.firebaseapp.com",

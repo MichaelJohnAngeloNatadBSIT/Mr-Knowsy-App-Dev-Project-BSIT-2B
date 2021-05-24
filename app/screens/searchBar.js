@@ -19,8 +19,6 @@ import { Card, CardItem } from 'native-base';
 import { Rating } from 'react-native-ratings';
 import { SearchBar, Icon } from 'react-native-elements';
 
-
-
 const Search = () => {
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
