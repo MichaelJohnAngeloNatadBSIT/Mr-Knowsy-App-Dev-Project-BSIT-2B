@@ -6,7 +6,7 @@ import ProfileIconsView from './profileScreen';
 
 
 //bottom tabs functions
-function YTvideosfunc() {
+  function YTvideosfunc() {
     return (   
         <Search />
        

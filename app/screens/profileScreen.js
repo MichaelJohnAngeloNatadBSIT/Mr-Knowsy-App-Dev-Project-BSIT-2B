@@ -1,5 +1,5 @@
 //import { Icon } from 'native-base';
-import { Button } from 'native-base';
+// import { Button } from 'native-base';
 import React, { Component,useState, useEffect } from 'react';
 import {
   StyleSheet,
@@ -8,16 +8,30 @@ import {
   Image,
   ScrollView,
   FlatList,
+  Button,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
-import { LogInScreen } from './loginScreen';
+import firebase from '../constants/fireBaseDB';
 
 
 export default class ProfileIconsView extends Component {
-  logInUser = () => {
-    this.props.navigation.navigate("LogInScreen");
-        };
+  constructor() {
+    super();
+    this.state = { 
+      uid: ''
+    }
+  }
+
+  signOut = () => {
+    firebase.auth().signOut().then(() => {
+      this.props.navigation.navigate('Login')
+    })
+    .catch(error => this.setState({ errorMessage: error.message }))
+  }  
   render() {
+    this.state = { 
+      displayName: firebase.auth().currentUser.displayName,
+      uid: firebase.auth().currentUser.uid
+    }    
     return (
       <ScrollView>
       <View style={styles.container}>
@@ -27,8 +41,13 @@ export default class ProfileIconsView extends Component {
                   source={{uri: 'https://bootdey.com/img/Content/avatar/avatar1.png'}}/>
 
                 <Text style={styles.name}>
-                  John Doe
+                  {this.state.displayName}
                 </Text>
+                <Button
+                  color="#3740FE"
+                  title="Logout"
+                  onPress={() => this.signOut()}
+                />
             </View>
           </View>
 
@@ -42,10 +61,12 @@ export default class ProfileIconsView extends Component {
 
               <View style={styles.menuBox}>
                 <Image style={styles.icon} source={{uri: 'https://img.icons8.com/color/70/000000/administrator-male.png'}}/>
-                <Text style={styles.info}>Icon</Text>
-                <Button onPress={this.logInUser} title="log in"/>
+                <Text style={styles.info}>Log In</Text>
+                <Button onPress={ this.logInUser } title="log in"/>
               </View>
-
+              
+              
+              
             </View>
         </View>
       </View>

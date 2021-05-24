@@ -15,21 +15,6 @@ import firebase from './app/constants/fireBaseDB';
 import UploadFiles from './app/screens/uploadFiles';
 
 
-setTimeout(()=>{
-  firebase.database().ref('users/004').set(
-    {
-      name: 'test4232442232',
-      age: 1252242424
-    }
-  ).then(()=>{
-    console.log('Inserted!');
-  }).catch((error)=> {
-    console.log('error');
-  });
-}, 5000)
-
-
-
 //drawer tabs for Screen A
 function ReactNavigationBottomTabs() {
   return (
@@ -54,7 +39,6 @@ function ScreenC() {
 }
 
 const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
 
 export default function DrawerScreen({ navigation }) {
 
@@ -64,6 +48,7 @@ export default function DrawerScreen({ navigation }) {
         <Drawer.Screen name='Screen A' component={ReactNavigationBottomTabs} />
         <Drawer.Screen name='Screen B' component={Signup} />
         <Drawer.Screen name='Screen C' component={UploadFiles} />
+        <Drawer.Screen name='Screen D' component={Login} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
