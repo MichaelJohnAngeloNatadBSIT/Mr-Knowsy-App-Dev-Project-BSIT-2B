@@ -1,10 +1,7 @@
-// Searching using Search Bar Filter in React Native List View
-// https://aboutreact.com/react-native-search-bar-filter-on-listview/
 
-// import React in our code
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-// import all the components we are going to use
 import { 
         SafeAreaView, 
         Text, 
@@ -15,25 +12,28 @@ import {
         TouchableOpacity,
         ScrollView,
         } from 'react-native';
-import { Card, CardItem } from 'native-base';
-import { Rating } from 'react-native-ratings';
+import { Card, CardItem, } from 'native-base';
 import { SearchBar, Icon } from 'react-native-elements';
+import firebase from '../constants/fireBaseDB';
 
-const Search = () => {
+
+const Search = (props) => {
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
-
-  useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/posts')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setFilteredDataSource(responseJson);
-        setMasterDataSource(responseJson);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  const [filesList, setFilesList] = useState([]);
+  const navigation = useNavigation(); 
+  React.useEffect(() => {
+    setFilesList([]);
+    const onChildAdded = firebase.database().ref(`pdf`).on('child_added', (snapshot) => {
+      let helperArr=[];
+      helperArr.push(snapshot.val());
+      setFilesList((files) => [...files, ...helperArr]);
+      console.log(snapshot.val());
+    });  
+    setMasterDataSource(filesList);
+    setFilteredDataSource(filesList);
+    return () => firebase.database().ref(`pdf`).off('child_added', onChildAdded);
   }, []);
 
   const searchFilterFunction = (text) => {
@@ -43,8 +43,8 @@ const Search = () => {
       // Filter the masterDataSource
       // Update FilteredDataSource
       const newData = masterDataSource.filter(function (item) {
-        const itemData = item.title
-          ? item.title.toUpperCase()
+        const itemData = item.bookTitle
+          ? item.bookTitle.toUpperCase()
           : ''.toUpperCase();
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
@@ -58,39 +58,31 @@ const Search = () => {
       setSearch(text);
     }
   };
-
+ 
   const ItemView = ({ item }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('File Preview')}>
       <Card style={{ marginTop: 10 }}>
        <CardItem>
           <View>
-          <Image
-            style={styles.image}
-            source={require('../assets/icon.png')}
-            />
-            <Text
-              style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}
-            >
-              {item.title.toUpperCase()}
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+              Title: {item.bookTitle}
             </Text>
-            <Text style={styles.itemStyle} onPress={() => getItem(item)}>
-              {item.id}
-              {'.'}
-              {item.body.toUpperCase()}
+            <Text>
+              Description: {item.bookDescription}
             </Text>
+            <Text>
+              Genre: {item.bookGenre}
+            </Text>
+            <Text>
+              Author: {item.bookAuthor}
+            </Text>
+            
         </View>
         </CardItem>
         <CardItem footer bordered>
           <View style={styles.footer}>
-          <Rating
-            imageSize={30}
-            onFinishRating={(rating) => {
-            alert('Star Rating: ' + JSON.stringify(rating));
-            
-          }}
-          style={styles.ratingStar}
-          />
+          
           </View>
         </CardItem>
         </Card>
@@ -111,11 +103,6 @@ const Search = () => {
     );
   };
 
-  const getItem = (item) => {
-    // Function for click on an item
-    alert('Id : ' + item.id + ' Title : ' + item.title);
-  };
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -134,7 +121,6 @@ const Search = () => {
           ItemSeparatorComponent={ItemSeparatorView}
           renderItem={ItemView}
         />
-   
       </View>
     </SafeAreaView>
   );
@@ -145,24 +131,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingTop: 25,
   },
-  itemStyle: {
-    padding: 10,
-  },
-  ratingStar:{
-    
-    paddingVertical: 10,
-    justifyContent: 'center',
-  },
-  image:{
-    height: 400,
-    width: 300,
-    alignSelf: 'center',
-  },
   searchBar:{
     backgroundColor: '#3366ff',
   },
   subheading: {
-    fontSize: 20,
+    fontSize: 50,
     fontWeight: '900',
     color: '#fff',
   },

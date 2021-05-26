@@ -11,8 +11,11 @@ import BottomTabsNav from './app/screens/bottomTabsNav';
 import LogInScreen  from './app/screens/loginScreen';
 import Signup from './app/screens/signUpScreen';
 import Login from './app/screens/loginScreen';
-import firebase from './app/constants/fireBaseDB';
 import UploadFiles from './app/screens/uploadFiles';
+import firebase from './app/constants/fireBaseDB';
+import FilePreview from './app/screens/filePreview';
+import Search from './app/screens/searchBar';
+
 
 
 //drawer tabs for Screen A
@@ -22,35 +25,33 @@ function ReactNavigationBottomTabs() {
   );
 }
 
-//drawer tabs for Screen B
-function ScreenB() {
-  return (
-    <LogInScreen />
-  );
-}
-
-//drawer tabs for Screen C
-function ScreenC() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Screen C</Text>
-    </View>
-  );
-}
-
 const Drawer = createDrawerNavigator();
+const DrawerScreen = ({ navigation }) =>{
+  return(
+      <Drawer.Navigator initialRouteName='Bottom Tabs'>
+        <Drawer.Screen name='Bottom Tabs' component={BottomTabsNav} />
+        <Drawer.Screen name='Sign Up' component={Signup} />
+        <Drawer.Screen name='Upload File' component={UploadFiles} />
+        <Drawer.Screen name='Login' component={Login} />
+      </Drawer.Navigator>
+  );
+}
 
-export default function DrawerScreen({ navigation }) {
+
+const Stack = createStackNavigator();
+export default function App() {
 
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName='LoginScreen'>
-        <Drawer.Screen name='Screen A' component={ReactNavigationBottomTabs} />
-        <Drawer.Screen name='Screen B' component={Signup} />
-        <Drawer.Screen name='Screen C' component={UploadFiles} />
-        <Drawer.Screen name='Screen D' component={Login} />
-      </Drawer.Navigator>
+      <Stack.Navigator initialRouteName="Bottom Tabs" headerMode="none">
+      <Stack.Screen name='Drawer Screen' component={DrawerScreen}/>
+      <Stack.Screen name='File Preview' component={FilePreview}/>
+      <Stack.Screen name='Search' component={Search}/>
+      </Stack.Navigator>
     </NavigationContainer>
+      
+      
+    
   );
 }
 

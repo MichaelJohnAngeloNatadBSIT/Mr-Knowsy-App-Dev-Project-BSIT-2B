@@ -57,7 +57,7 @@ export default class SignUp extends React.Component{
               email: '', 
               password: ''
             })
-            this.props.navigation.navigate('Screen C')
+            this.props.navigation.navigate('Login')
           })
           .catch(error => this.setState({ errorMessage: error.message }))      
         }
@@ -123,9 +123,9 @@ export default class SignUp extends React.Component{
             <TouchableOpacity style={styles.loginButton}>
                 <Button onPress={() => this.registerUser()} title='Sign Up'/>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} >
               <Text style={styles.registerText}>
-                Don't have an account? Register Now
+                Already have an account? Log In Now
               </Text>
             </TouchableOpacity>
             <TouchableOpacity>
