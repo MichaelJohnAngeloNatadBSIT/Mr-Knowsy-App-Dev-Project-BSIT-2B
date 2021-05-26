@@ -14,7 +14,6 @@ import {
   Alert,
 } from 'react-native';
 
-
 import firebase from '../constants/fireBaseDB';
 
 export default class Login extends React.Component{
@@ -50,6 +49,7 @@ export default class Login extends React.Component{
       .then((res) => {
         console.log(res)
         console.log('User logged-in successfully!')
+        Alert.alert('User Logged in successfully')
         this.setState({
           isLoading: false,
           email: '', 
@@ -60,6 +60,7 @@ export default class Login extends React.Component{
       .catch(error => this.setState({ errorMessage: error.message }))
     }
   }
+  
 
   render(){
     if(this.state.isLoading){
@@ -109,7 +110,7 @@ export default class Login extends React.Component{
             <TouchableOpacity style={styles.loginButton}>
               <Button onPress={() => this.userLogin()} title='log in'/>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Sign Up')}>
               <Text style={styles.registerText}>
                 Don't have an account? Register Now
               </Text>

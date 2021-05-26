@@ -1,5 +1,6 @@
 //import { Icon } from 'native-base';
 // import { Button } from 'native-base';
+import { Icon } from 'react-native-elements'
 import React, { Component,useState, useEffect } from 'react';
 import {
   StyleSheet,
@@ -17,7 +18,8 @@ export default class ProfileIconsView extends Component {
   constructor() {
     super();
     this.state = { 
-      uid: ''
+      displayName: '',
+      uid: '',
     }
   }
 
@@ -41,12 +43,17 @@ export default class ProfileIconsView extends Component {
                   source={{uri: 'https://bootdey.com/img/Content/avatar/avatar1.png'}}/>
 
                 <Text style={styles.name}>
+                  {/* {if(this.state.displayName !==''){this.state.displayName}
+                  else{
+                    
+                  }
+                  } */}
                   {this.state.displayName}
                 </Text>
                 <Button
                   color="#3740FE"
                   title="Logout"
-                  onPress={() => this.signOut()}
+                  onPress={() => {if(this.state.uid !== ''){this.signOut()}}}
                 />
             </View>
           </View>

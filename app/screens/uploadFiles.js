@@ -14,23 +14,26 @@ import {
     Alert,
   } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
-import * as ImagePicker from 'expo-image-picker';
 import { Platform } from 'react-native';
 import firebase from '../constants/fireBaseDB';
+import PDFReader from 'rn-pdf-reader-js';
+import PdfThumbnail from "react-native-pdf-thumbnail";
+import { ScrollView } from 'react-native-gesture-handler';
 
-export default class UploadFiles extends React.Component{
 
-    state = {
-        image: null,
-      };
+
+export default class UploadFiles extends React.Component{  
+  
       constructor() {
         super();
         this.state = { 
-          bookName: '',
+          bookTitle: '',
           bookDescription: '', 
           bookAuthor: '',
           resultURI: '',
-          isLoading: false
+          resultFileName: '',
+          bookGenre: '',
+          isLoading: false,
         }
       }
       updateInputVal = (val, prop) => {
@@ -38,6 +41,8 @@ export default class UploadFiles extends React.Component{
         state[prop] = val;
         this.setState(state);
       }
+
+      
       
       //removes file:// from path
       normalizePath = async (path) => {
@@ -57,14 +62,19 @@ export default class UploadFiles extends React.Component{
       }
      
     _pickDocument = async () => {
+      
         let result = await DocumentPicker.getDocumentAsync({
           type: "application/pdf",
         });
           alert(result.uri);
+          
           console.log(result);
           const path = await this.normalizePath(result.uri);
           if (!result.cancelled) {
-          this.uploadPDF(result.uri)
+          this.setState({
+            resultURI : result.uri,
+            resultFileName: result.name,
+          })
           .then(() => {
             console.log(result)
           })
@@ -73,95 +83,33 @@ export default class UploadFiles extends React.Component{
           });
           
       }
-      };
-  
-     _pickImage = async () => {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      alert(result.uri);
-      console.log(result)
-      const path = await this.normalizePath(result.uri);
-      console.log('path is ' + path);
-      const imageName = result.uri.substring(result.uri.lastIndexOf('/') + 1);
-      if (!result.cancelled) {
-       // this.setState({ image: result.uri });
-        this.uploadImage(result.uri, imageName, result)
-        .then(() => {
-          console.log('passing to db (then stmt)');
-        })
-        .catch((error) => {
-        console.log(error);
-        });
-      }
-    };
-
-
-    uploadImage = async (fileURI, imageName, file) => {
-      const response = await fetch(fileURI);
-      const blob = await response.blob();
-
-      this.setState({
-        isLoading: true,
-      })
-      const uploadTask = firebase.storage().ref('images/' +imageName)
-      .put(blob);
-      // Listen for state changes, errors, and completion of the upload.
-      uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-      (snapshot) => {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED: // or 'paused'
-            console.log('Upload is paused');
-            break;
-          case firebase.storage.TaskState.RUNNING: // or 'running'
-            console.log('Upload is running');
-            break;
-        }
-      }, 
-      (error) => {
-        // A full list of error codes is available at
-        // https://firebase.google.com/docs/storage/web/handle-errors
-        switch (error.code) {
-          case 'storage/unauthorized':
-            // User doesn't have permission to access the object
-            break;
-          case 'storage/canceled':
-            // User canceled the upload
-            break;
-
-          // ...
-
-          case 'storage/unknown':
-            // Unknown error occurred, inspect error.serverResponse
-            break;
-        }
-      }, 
-      () => {
-        // Upload completed successfully, now we can get the download URL
-        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-          console.log('File available at', downloadURL);
-        });
-      }
-      );
-    }
-  
-    // , bookName, bookDescription, bookAuthor
-    uploadPDF = async (fileURI) => {
-      const response = await fetch(fileURI);
-      const blob = await response.blob();
-      this.setState({
-        isLoading: true,
-      })
-      console.log("bookname: "+this.state.bookName);
-
       
+      
+      };
 
-        const uploadTask = firebase.storage().ref('pdf/' +this.state.bookName).put(blob);
+      // testUseEffect = () =>{
+      //   React.useEffect(() => {
+      //     const onChildAdded = firebase.database().ref('pdf/').on('child_added', (snapshot) => {
+      //      console.log('snapshot: '+snapshot.val())  
+      //     })  
+      //     return () => firebase.database().ref('pdf/').off('child_added', onChildAdded);
+      //   },[]);
+      // }
+  
+    // , bookTitle, bookDescription, bookAuthor
+    uploadPDF = async (fileURI) => {
+      if(this.state.bookTitle === '' && this.state.bookGenre === '' && this.state.bookAuthor === ''&& this.state.bookDescription === '' && this.state.bookGenre === '' && this.state.resultURI === '') {
+        Alert.alert('Please Fill Out All needed Details!')
+      }
+      else{
+      const response = await fetch(fileURI);
+      const blob = await response.blob();
+      this.setState({
+        isLoading: true,
+      })
+      console.log("bookTitle: "+this.state.bookTitle);
+
+        const uploadTask = firebase.storage().ref('pdf/' +this.state.bookTitle).put(blob);
         // Listen for state changes, errors, and completion of the upload.
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
         (snapshot) => {
@@ -173,6 +121,9 @@ export default class UploadFiles extends React.Component{
               console.log('Upload is paused');
               break;
             case firebase.storage.TaskState.RUNNING: // or 'running'
+            this.setState({
+              isLoading: true,
+            })
               console.log('Upload is running');
               break;
           }
@@ -197,16 +148,18 @@ export default class UploadFiles extends React.Component{
         }, 
         () => {
           // Upload completed successfully, now we can get the download URL
+          Alert.alert('File Uploaded Successfully')
           const uniqueKey = firebase.database().ref().push().key;
           uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
             console.log('File available at', downloadURL);
             
           firebase.database().ref('pdf/'+uniqueKey).set(
             {
-              fileName: this.state.bookName,
-              fileDescription: this.state.bookDescription,
-              fileAuthor: this.state.bookAuthor,
-              fileURL: downloadURL,
+              bookTitle: this.state.bookTitle,
+              bookDescription: this.state.bookDescription,
+              bookGenre: this.state.bookGenre,
+              bookAuthor: this.state.bookAuthor,
+              bookURL: downloadURL,
             }
           ).then(()=>{
             console.log('Inserted!');
@@ -214,59 +167,103 @@ export default class UploadFiles extends React.Component{
               isLoading: false,
               bookAuthor: '', 
               bookDescription: '',
-              bookName:'',
+              bookGenre: '',
+              bookTitle:'',
               resultURI:'',
+              resultFileName: '',
             })
+          }).catch((e) => {
+          
+            console.log('uploading image error => ', e);
+            this.setState({ isLoading: false });
           });
           
           })
         
         },
         );
-        
+      } 
     }
-
+    removeFile = () => {
+      this.setState({
+        resultFileName: '',
+        resultURI: '',
+      })
+    }
+       
    render(){
         let { image } = this.state;
+        if(this.state.isLoading){
+          return(
+            <View style={styles.container}>
+              <Text style={styles.loadingText}>File is Uploading please wait....</Text>
+              <ActivityIndicator size="large" color="#9E9E9E" style={styles.loadingIndicator}/>
+            </View>
+          )
+        } 
+         
    return (
-    <View style={styles.container}> 
-    <TextInput
-    style={styles.inputStyle}
-    placeholder="Book Name"
-    value={this.state.bookName}
-    onChangeText={(val) => this.updateInputVal(val, 'bookName')}
-  />      
-  <TextInput
-    style={styles.inputStyle}
-    placeholder="Book Description"
-    value={this.state.bookDescription}
-    onChangeText={(val) => this.updateInputVal(val, 'bookDescription')}
-  />
-  <TextInput
-    style={styles.inputStyle}
-    placeholder="Book Author"
-    value={this.state.boookAuthor}
-    onChangeText={(val) => this.updateInputVal(val, 'bookAuthor')}
-    
-  /> 
-    <View style={{ 'marginTop': 20}}>
-      <Button
-        title="Select Document"
-        onPress={this._pickDocument}
+     
+    <View style={styles.container}>
+       <View style={styles.topBar}>
+        
+        <Text>Upload PDF Book File</Text>
+        
+      </View>
+    <ScrollView>
+    <View>
+      <TextInput
+        style={styles.inputStyle}
+        placeholder="Book Name"
+        value={this.state.bookTitle}
+        onChangeText={(val) => this.updateInputVal(val, 'bookTitle')}
+      />      
+      <TextInput
+        style={styles.inputStyle}
+        placeholder="Book Description"
+        value={this.state.bookDescription}
+        onChangeText={(val) => this.updateInputVal(val, 'bookDescription')}
       />
-    
-    <View style={{ 'marginTop': 70}}>
-      <Button
-        title="UPLOAD FILE"
-        onPress={() => this.uploadPDF()}
+      <TextInput
+        style={styles.inputStyle}
+        placeholder="Book Genre"
+        value={this.state.bookGenre}
+        onChangeText={(val) => this.updateInputVal(val, 'bookGenre')}
+      />   
+      <TextInput
+        style={styles.inputStyle}
+        placeholder="Book Author"
+        value={this.state.boookAuthor}
+        onChangeText={(val) => this.updateInputVal(val, 'bookAuthor')}
+        
       />
-       
-       
-       {image &&
-         <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-         </View>
-     </View>
-     </View>
+      <View style={styles.fileNameStyle}>
+      <Text>{this.state.resultFileName}</Text>
+      <Button
+        title="Remove File"
+        onPress={this.removeFile}
+        />
+      </View>
+      
+        <View style={{ 'marginTop': 20}}>
+          <Button
+            title="Select Document"
+            onPress={this._pickDocument}
+          />
+        
+        <View style={{ 'marginTop': 20}}>
+          <Button
+            title="UPLOAD FILE"
+            onPress={() => this.uploadPDF(this.state.resultURI)}
+          />
+          
+          {image &&
+            <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+            </View>
+        </View>
+        </View>
+      </ScrollView>
+      </View>
    );
  }
 }
@@ -278,7 +275,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 35,
     backgroundColor: '#fff',
-    paddingTop: 20,
+  },
+  fileNameStyle:{
+    flexDirection: 'row',
   },
   inputStyle: {
     width: '100%',
@@ -288,10 +287,31 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderBottomWidth: 1
   },
+  loadingIndicator: {
+    zIndex: 5,
+    width: '100%',
+    height: '100%',
+  },
+  loadingText:{
+    justifyContent: 'center',
+    alignSelf: 'center',
+    fontSize: 20,
+  },
   loginText: {
     color: '#3740FE',
-    marginTop: 25,
+    marginTop: 15,
     textAlign: 'center'
+  },
+  topBar:{
+    alignSelf: 'center',
+    height: 52,
+    width: 300,
+    flexDirection: 'row', // row
+    backgroundColor: '#0099e6',
+    alignItems: 'center',
+    justifyContent: 'center', // center, space-around
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   preloader: {
     left: 0,
