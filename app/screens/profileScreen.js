@@ -19,7 +19,9 @@ export default class ProfileIconsView extends Component {
     }
   
   }
-
+checkingRoute = ({route}) =>{
+  console.log(route);
+}
   signOut = () => {
     firebase.auth().signOut().then(() => {
       this.props.navigation.navigate('Login')
@@ -32,8 +34,8 @@ export default class ProfileIconsView extends Component {
   }  
 
   render() {
-   
-    if(this.state.uid !== ''){
+    
+  if(this.state.uid !== ''){
     this.state = { 
       displayName: firebase.auth().currentUser.displayName,
       uid: firebase.auth().currentUser.uid
@@ -48,7 +50,7 @@ export default class ProfileIconsView extends Component {
 
   let button, textIcon;
   if (this.state.uid !== '') {
-    button = <Icon name='log-out-outline' type='ionicon' onPresS={() => this.signOut()}/>;
+    button = <Icon name='log-out-outline' type='ionicon' onPress={() => this.signOut()}/>;
     textIcon = <Text style={styles.info}>Log Out</Text>;
   }
 
