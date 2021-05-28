@@ -9,6 +9,8 @@ import {
         FlatList,
         TouchableOpacity,
         TextInput,
+        RefreshControl,
+        ToastAndroid,
         } from 'react-native';
 import { Card, CardItem, } from 'native-base';
 import Constant from 'expo-constants'
@@ -20,19 +22,34 @@ const SearchFile = (props) => {
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const [filesList, setFilesList] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation(); 
-  
-  React.useEffect(() => {
-    setFilesList([]);
-    const onChildAdded = firebase.database().ref(`pdf`).on('child_added', (snapshot) => {
-      let helperArr=[];
-      helperArr.push(snapshot.val());
-      setFilesList((files) => [...files, ...helperArr]);
-    });  
-    setMasterDataSource(filesList);
-    setFilteredDataSource(filesList);
-    return () => firebase.database().ref(`pdf`).off('child_added', onChildAdded);
-  }, []);
+  //https://stackoverflow.com/questions/46499053/get-first-firebase-child-without-key
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    if (filesList.length < 10) {
+      try {
+        setFilesList([]);
+        const onChildAdded = await firebase.database().ref(`pdf`).on('child_added', (snapshot) => {
+              console.log(snapshot);
+              let helperArr=[];
+              helperArr.push(snapshot.val());
+              setFilesList((files) => [...files, ...helperArr]);
+            });  
+            setMasterDataSource(filesList);
+            setFilteredDataSource(filesList);
+            setRefreshing(false)
+            return () => firebase.database().ref(`pdf`).off('child_added', onChildAdded);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    else{
+      ToastAndroid.show('No more new data available', ToastAndroid.SHORT);
+      setRefreshing(false)
+    }
+  }, [refreshing]);
 
   const searchFilterFunction = (text) => {
     // Check if searched text is not blank
@@ -122,6 +139,9 @@ const SearchFile = (props) => {
           keyExtractor={(item, index) => index.toString()}
           ItemSeparatorComponent={ItemSeparatorView}
           renderItem={ItemView}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       </View>
     </SafeAreaView>

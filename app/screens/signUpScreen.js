@@ -49,7 +49,7 @@ export default class SignUp extends React.Component{
             res.user.updateProfile({
               displayName: this.state.displayName
             })
-            console.log('User registered successfully!')
+            Alert.alert('User registered successfully!')
             this.setState({
               isLoading: false,
               displayName: '',

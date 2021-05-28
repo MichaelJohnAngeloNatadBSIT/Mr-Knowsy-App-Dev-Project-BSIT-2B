@@ -24,7 +24,7 @@ const SearchYoutube = (props) => {
     
     const fetchData = () =>{
       setLoading(true)
-      fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=viewCount&q=${value}&type=video&videoDefinition=any&videoType=any&key=AIzaSyCAiW6LaAE78hGNe0537iWdpfvuOF1h2kE`)
+      fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=viewCount&q=${value}&type=video&videoDefinition=any&videoType=any&key=AIzaSyDqDn8sKbJLD2eb9pwWSxS6rZ_By2UCR1E`)
       .then(res=>res.json())
       .then((data)=>{
           setLoading(false)
