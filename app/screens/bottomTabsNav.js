@@ -1,21 +1,23 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'react-native-elements';
-import Search from './searchBar';
+import SearchFile from './searchBar';
 import ProfileIconsView from './profileScreen';
+import SearchYoutube from './youtubeSearch';
+import { View } from 'react-native';
 
 
 //bottom tabs functions
   function YTvideosfunc() {
     return (   
-        <Search />
-       
+      <SearchYoutube />
+  
     );
   }
   //top tabs - art books tab
   function artBoofunc() {
     return (
-      <Search />
+      <SearchFile />
     );
   }
   function acctFunc() {
@@ -52,7 +54,7 @@ function BottomTabsNav(props) {
       }}
     />
     <Tab.Screen
-      name='Articles/Books'
+      name='Books'
       component={artBoofunc}
       options={{
         tabBarIcon: ({ color, size }) => (

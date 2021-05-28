@@ -1,35 +1,33 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
 import { 
         SafeAreaView, 
         Text, 
         StyleSheet, 
         View, 
         FlatList,
-        Image,
         TouchableOpacity,
-        ScrollView,
+        TextInput,
         } from 'react-native';
 import { Card, CardItem, } from 'native-base';
-import { SearchBar, Icon } from 'react-native-elements';
+import Constant from 'expo-constants'
 import firebase from '../constants/fireBaseDB';
 
 
-const Search = (props) => {
+const SearchFile = (pros) => {
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const [filesList, setFilesList] = useState([]);
   const navigation = useNavigation(); 
+  
   React.useEffect(() => {
     setFilesList([]);
     const onChildAdded = firebase.database().ref(`pdf`).on('child_added', (snapshot) => {
       let helperArr=[];
       helperArr.push(snapshot.val());
       setFilesList((files) => [...files, ...helperArr]);
-      console.log(snapshot.val());
     });  
     setMasterDataSource(filesList);
     setFilteredDataSource(filesList);
@@ -59,9 +57,13 @@ const Search = (props) => {
     }
   };
  
-  const ItemView = ({ item }) => {
+  const ItemView = ({ item, index }) => {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate('File Preview')}>
+      <TouchableOpacity 
+      key = {index}
+      onPress={() => navigation.navigate('File Preview',{
+        bURL: item.bookURL,
+      })}>
       <Card style={{ marginTop: 10 }}>
        <CardItem>
           <View>
@@ -106,15 +108,15 @@ const Search = (props) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <SearchBar
-          round
-          searchIcon={{ size: 25 }}
-          onChangeText={(text) => searchFilterFunction(text)}
-          onClear={(text) => searchFilterFunction('')}
-          placeholder="Search Something Here..."
-          value={search}
-          containerStyle={{backgroundColor:'#0099e6'}}
-        />
+        <View style={styles.searchContainer}>
+        <TextInput
+             style={styles.searchBar}
+             value={search}
+             onChangeText={(text) => searchFilterFunction(text)}
+             placeholder="Search Book Title Here..."
+             onClear={(text) => searchFilterFunction('')}
+             />
+        </View>
         <FlatList
           data={filteredDataSource}
           keyExtractor={(item, index) => index.toString()}
@@ -129,10 +131,20 @@ const Search = (props) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    paddingTop: 25,
+    flex:1,
+    marginTop:Constant.statusBarHeight,
+  },
+  searchContainer:{
+    padding:5,
+    flexDirection:"row",
+    justifyContent:"space-around",
+    elevation:5,
+    backgroundColor: "#0099e6",
   },
   searchBar:{
-    backgroundColor: '#3366ff',
+    width:"90%",
+    height:35,
+    backgroundColor:"#e6e6e6",
   },
   subheading: {
     fontSize: 50,
@@ -152,4 +164,4 @@ const styles = StyleSheet.create({
   
 });
 
-export default Search;
+export default SearchFile;

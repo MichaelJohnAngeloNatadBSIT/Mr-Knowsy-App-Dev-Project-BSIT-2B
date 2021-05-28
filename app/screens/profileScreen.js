@@ -30,10 +30,27 @@ export default class ProfileIconsView extends Component {
     .catch(error => this.setState({ errorMessage: error.message }))
   }  
   render() {
+    if(this.state.uid !== ''){
     this.state = { 
       displayName: firebase.auth().currentUser.displayName,
       uid: firebase.auth().currentUser.uid
-    }    
+    }
+  } 
+  
+  let button;
+  if (this.state.uid == '') {
+    button = <Button
+    color="#3740FE"
+    title="Log In"
+  />;
+  } else {
+    button = <Button
+    color="#3740FE"
+    title="Log Out"
+    onPress={() => this.signOut()}
+  />;
+  }
+
     return (
       <ScrollView>
       <View style={styles.container}>
@@ -43,18 +60,9 @@ export default class ProfileIconsView extends Component {
                   source={{uri: 'https://bootdey.com/img/Content/avatar/avatar1.png'}}/>
 
                 <Text style={styles.name}>
-                  {/* {if(this.state.displayName !==''){this.state.displayName}
-                  else{
-                    
-                  }
-                  } */}
                   {this.state.displayName}
                 </Text>
-                <Button
-                  color="#3740FE"
-                  title="Logout"
-                  onPress={() => {if(this.state.uid !== ''){this.signOut()}}}
-                />
+                {button}
             </View>
           </View>
 
@@ -65,14 +73,6 @@ export default class ProfileIconsView extends Component {
                 <Icon name='upload' type='font-awesome' />
                 <Text style={styles.info}>Icon</Text>
               </View>
-
-              <View style={styles.menuBox}>
-                <Image style={styles.icon} source={{uri: 'https://img.icons8.com/color/70/000000/administrator-male.png'}}/>
-                <Text style={styles.info}>Log In</Text>
-                <Button onPress={ this.logInUser } title="log in"/>
-              </View>
-              
-              
               
             </View>
         </View>
