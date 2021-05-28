@@ -4,7 +4,6 @@ import { Icon } from 'react-native-elements';
 import SearchFile from './searchBar';
 import ProfileIconsView from './profileScreen';
 import SearchYoutube from './youtubeSearch';
-import { View } from 'react-native';
 
 
 //bottom tabs functions

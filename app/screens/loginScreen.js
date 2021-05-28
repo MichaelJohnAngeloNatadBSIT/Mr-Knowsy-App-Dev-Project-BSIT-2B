@@ -91,7 +91,7 @@ export default class Login extends React.Component{
                 style={styles.input}
                 autoCapitalize={false}
                 keyboardType='email-address'
-                textContentType='email'
+                textContentType='emailAddress'
                 value={this.state.email}
                 onChangeText={(val) => this.updateInputVal(val, 'email')}
               />

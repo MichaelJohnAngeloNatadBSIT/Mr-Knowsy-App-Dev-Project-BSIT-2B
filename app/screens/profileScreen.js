@@ -1,15 +1,11 @@
-//import { Icon } from 'native-base';
-// import { Button } from 'native-base';
 import { Icon } from 'react-native-elements'
-import React, { Component,useState, useEffect } from 'react';
+import React, { Component } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   StyleSheet,
   Text,
   View,
-  Image,
-  ScrollView,
-  FlatList,
-  Button,
+  ScrollView,  
 } from 'react-native';
 import firebase from '../constants/fireBaseDB';
 
@@ -21,6 +17,7 @@ export default class ProfileIconsView extends Component {
       displayName: '',
       uid: '',
     }
+  
   }
 
   signOut = () => {
@@ -29,26 +26,30 @@ export default class ProfileIconsView extends Component {
     })
     .catch(error => this.setState({ errorMessage: error.message }))
   }  
+  logIn = () => {
+    const navigation = useNavigation();
+    navigation.navigate('Login');
+  }  
+
   render() {
+   
     if(this.state.uid !== ''){
     this.state = { 
       displayName: firebase.auth().currentUser.displayName,
       uid: firebase.auth().currentUser.uid
     }
+  }
+  else{
+    this.state = { 
+      displayName: 'Please Log or Sign in to Unlock some of our Features',
+      uid: '',
+    }
   } 
-  
-  let button;
-  if (this.state.uid == '') {
-    button = <Button
-    color="#3740FE"
-    title="Log In"
-  />;
-  } else {
-    button = <Button
-    color="#3740FE"
-    title="Log Out"
-    onPress={() => this.signOut()}
-  />;
+
+  let button, textIcon;
+  if (this.state.uid !== '') {
+    button = <Icon name='log-out-outline' type='ionicon' onPresS={() => this.signOut()}/>;
+    textIcon = <Text style={styles.info}>Log Out</Text>;
   }
 
     return (
@@ -56,24 +57,18 @@ export default class ProfileIconsView extends Component {
       <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.headerContent}>
-                <Image style={styles.avatar}
-                  source={{uri: 'https://bootdey.com/img/Content/avatar/avatar1.png'}}/>
-
                 <Text style={styles.name}>
                   {this.state.displayName}
                 </Text>
-                {button}
             </View>
           </View>
 
           <View style={styles.body}>
             <View style={styles.bodyContent}>
-
-              <View style={styles.menuBox}>
-                <Icon name='upload' type='font-awesome' />
-                <Text style={styles.info}>Icon</Text>
+              <View style={styles.menuBox}> 
+                {button}
+                {textIcon}
               </View>
-              
             </View>
         </View>
       </View>
@@ -100,7 +95,7 @@ const styles = StyleSheet.create({
   },
   name:{
     fontSize:22,
-    color:"#FFFFFF",
+    color:"#151517",
     fontWeight:'600',
   },
   bodyContent: {
@@ -119,7 +114,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   menuBox:{
-    backgroundColor: "#DCDCDC",
+    // backgroundColor: "#DCDCDC",
     width:100,
     height:100,
     alignItems: 'center',

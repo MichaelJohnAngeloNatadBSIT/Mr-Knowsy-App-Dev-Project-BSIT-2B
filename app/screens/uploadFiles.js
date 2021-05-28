@@ -5,10 +5,6 @@ import {
     View,
     TextInput,
     Image,
-    Dimensions,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    Keyboard,
     Button,
     ActivityIndicator,
     Alert,
@@ -16,8 +12,6 @@ import {
 import * as DocumentPicker from 'expo-document-picker';
 import { Platform } from 'react-native';
 import firebase from '../constants/fireBaseDB';
-import PDFReader from 'rn-pdf-reader-js';
-import PdfThumbnail from "react-native-pdf-thumbnail";
 import { ScrollView } from 'react-native-gesture-handler';
 
 
@@ -86,15 +80,6 @@ export default class UploadFiles extends React.Component{
       
       
       };
-
-      // testUseEffect = () =>{
-      //   React.useEffect(() => {
-      //     const onChildAdded = firebase.database().ref('pdf/').on('child_added', (snapshot) => {
-      //      console.log('snapshot: '+snapshot.val())  
-      //     })  
-      //     return () => firebase.database().ref('pdf/').off('child_added', onChildAdded);
-      //   },[]);
-      // }
   
     // , bookTitle, bookDescription, bookAuthor
     uploadPDF = async (fileURI) => {
@@ -275,6 +260,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 35,
     backgroundColor: '#fff',
+  },
+  loadingContainer:{
+    flex: 1,
+    alignItems: 'center',
+    alignSelf: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
   },
   fileNameStyle:{
     flexDirection: 'row',

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { 
         SafeAreaView, 
@@ -16,9 +16,6 @@ import {
         import Constant from 'expo-constants'
 import {Ionicons} from '@expo/vector-icons';
 
-
-//https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=viewCount&q=${search}&type=video&videoDefinition=any&videoType=any&key=AIzaSyDqDn8sKbJLD2eb9pwWSxS6rZ_By2UCR1E
-//https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=viewCount&q=test&type=video&videoDefinition=any&videoType=any&key=AIzaSyDqDn8sKbJLD2eb9pwWSxS6rZ_By2UCR1E
 const SearchYoutube = (props) => {
     const navigation = useNavigation();
     const [value,setValue] = useState('');
@@ -26,7 +23,6 @@ const SearchYoutube = (props) => {
     const [loading,setLoading] = useState(false)
     
     const fetchData = () =>{
-      console.log('pressed');
       setLoading(true)
       fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=viewCount&q=${value}&type=video&videoDefinition=any&videoType=any&key=AIzaSyCAiW6LaAE78hGNe0537iWdpfvuOF1h2kE`)
       .then(res=>res.json())
@@ -108,10 +104,7 @@ const SearchYoutube = (props) => {
           ItemSeparatorComponent={ItemSeparatorView}
           renderItem={ItemView}
         />
-        
-      
-    </View>
-   
+      </View>
     </SafeAreaView>
   );
 };
