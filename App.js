@@ -15,15 +15,8 @@ import UploadFiles from './app/screens/uploadFiles';
 import firebase from './app/constants/fireBaseDB';
 import FilePreview from './app/screens/filePreview';
 import Search from './app/screens/searchBar';
+import VideoPlayer from './app/screens/videoPlayer';
 
-
-
-//drawer tabs for Screen A
-function ReactNavigationBottomTabs() {
-  return (
-    <BottomTabsNav/>
-  );
-}
 
 const Drawer = createDrawerNavigator();
 const DrawerScreen = ({ navigation }) =>{
@@ -39,7 +32,7 @@ const DrawerScreen = ({ navigation }) =>{
 
 
 const Stack = createStackNavigator();
-export default function App() {
+export default function App({ navigation }) {
 
   return (
     <NavigationContainer>
@@ -47,6 +40,7 @@ export default function App() {
       <Stack.Screen name='Drawer Screen' component={DrawerScreen}/>
       <Stack.Screen name='File Preview' component={FilePreview}/>
       <Stack.Screen name='Search' component={Search}/>
+      <Stack.Screen name='Video Player' component={VideoPlayer}/>
       </Stack.Navigator>
     </NavigationContainer>
       
