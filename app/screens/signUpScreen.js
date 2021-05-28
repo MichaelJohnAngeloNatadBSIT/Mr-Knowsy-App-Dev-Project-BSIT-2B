@@ -14,7 +14,6 @@ import {
     ActivityIndicator,
     Alert,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
 import firebase from '../constants/fireBaseDB';
 
 
@@ -91,7 +90,7 @@ export default class SignUp extends React.Component{
               <TextInput
                 style={styles.input}
                 autoCapitalize={false}
-                keyboardType='name'
+                keyboardType="default"
                 textContentType='name'
                 value={this.state.displayName}
                 onChangeText={(val) => this.updateInputVal(val, 'displayName')}
@@ -102,7 +101,7 @@ export default class SignUp extends React.Component{
               <TextInput
                 style={styles.input}
                 autoCapitalize={false}
-                keyboardType='email-address'
+                keyboardType="email-address"
                 textContentType='emailAddress'
                 value={this.state.email}
                 onChangeText={(val) => this.updateInputVal(val, 'email')}
@@ -114,7 +113,7 @@ export default class SignUp extends React.Component{
                 style={styles.input}
                 autoCapitalize={false}
                 secureTextEntry={true}
-                textContentType='password'
+                textContentType="password"
                 value={this.state.password}
                 onChangeText={(val) => this.updateInputVal(val, 'password')}
                 maxLength={15}

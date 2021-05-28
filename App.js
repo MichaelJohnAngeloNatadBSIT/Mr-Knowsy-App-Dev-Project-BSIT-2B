@@ -16,6 +16,7 @@ import firebase from './app/constants/fireBaseDB';
 import FilePreview from './app/screens/filePreview';
 import Search from './app/screens/searchBar';
 import VideoPlayer from './app/screens/videoPlayer';
+import ProfileIconsView from './app/screens/profileScreen';
 
 
 const Drawer = createDrawerNavigator();
@@ -41,6 +42,8 @@ export default function App({ navigation }) {
       <Stack.Screen name='File Preview' component={FilePreview}/>
       <Stack.Screen name='Search' component={Search}/>
       <Stack.Screen name='Video Player' component={VideoPlayer}/>
+      <Stack.Screen name='Login' component={Login}/>
+      <Stack.Screen name='Profile Screen' component={ProfileIconsView}/>
       </Stack.Navigator>
     </NavigationContainer>
       
@@ -48,37 +51,3 @@ export default function App({ navigation }) {
     
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-  },
-  text: {
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  postContainer:{
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center', 
-  },
-  searchContainer:{
-    paddingTop: 30,
-    
-  },
-  text: {
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  topTabContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  topTabText: {
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-});

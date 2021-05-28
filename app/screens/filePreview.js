@@ -1,20 +1,15 @@
-import { Content } from 'native-base';
 import React from 'react';
-import { 
-    SafeAreaView, 
-    Text, 
+import {
     StyleSheet, 
     View, 
-    FlatList,
-    Image,
-    TouchableOpacity,
-    ScrollView,
     } from 'react-native';
     import PDFReader from 'rn-pdf-reader-js';
+
+
 const FilePreview = ({route}) =>{
 
     return(
-        
+        //View PDF file of book
         <View style={styles.container}>
         <PDFReader
             source={{

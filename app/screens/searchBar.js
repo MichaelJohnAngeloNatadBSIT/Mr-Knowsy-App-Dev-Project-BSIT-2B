@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { 
         SafeAreaView, 
@@ -15,7 +15,7 @@ import Constant from 'expo-constants'
 import firebase from '../constants/fireBaseDB';
 
 
-const SearchFile = (pros) => {
+const SearchFile = (props) => {
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
