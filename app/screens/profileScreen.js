@@ -41,12 +41,7 @@ checkingRoute = ({route}) =>{
       uid: firebase.auth().currentUser.uid
     }
   }
-  else{
-    this.state = { 
-      displayName: 'Please Log or Sign in to Unlock some of our Features',
-      uid: '',
-    }
-  } 
+  
 
   let button, textIcon;
   if (this.state.uid !== '') {

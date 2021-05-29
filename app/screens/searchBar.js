@@ -24,7 +24,6 @@ const SearchFile = (props) => {
   const [filesList, setFilesList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation(); 
-  //https://stackoverflow.com/questions/46499053/get-first-firebase-child-without-key
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -32,10 +31,10 @@ const SearchFile = (props) => {
       try {
         setFilesList([]);
         const onChildAdded = await firebase.database().ref(`pdf`).on('child_added', (snapshot) => {
-              console.log(snapshot);
+              //console.log(snapshot);
               let helperArr=[];
               helperArr.push(snapshot.val());
-              setFilesList((files) => [...files, ...helperArr]);
+              setFilesList((files) => [...files,...helperArr]);
             });  
             setMasterDataSource(filesList);
             setFilteredDataSource(filesList);
